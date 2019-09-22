@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Display a map with a custom style</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+    #checkboxes {position:absolute; top:0; right:0;}
+
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    #menu a:last-child {
+        border: none;
+    }
+
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+
+    #menu a.active {
+        background-color: #3887be;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #3074a4;
+    }
+</style>
+</head>
+<body>
+<nav id="menu"></nav>
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibGVsaXNhdm8iLCJhIjoiY2p3cHRoMTY5MTRkaTRhb2R6eGIyY281dCJ9.xCgih4PIUndYPcEqcjRVNg';
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/lelisavo/cjwpu308u4wne1co8fh5ycfhx', //hosted style id
+center: [-78.6569, 37.4316], // starting position
+zoom: 6 // starting zoom
+});
+
+map.on('load', function() {
+
+
+map.addSource('va-precincts', {
+"type": "vector",
+"url": "mapbox://lelisavo.7r16q4hz"
+});
+
+map.addLayer({
+'id': 'va-precincts-layer',
+'type': 'fill',
+'source': 'va-precincts',
+'source-layer': 'vaprecincts-74vmft',
+'paint': {
+'fill-color': 'rgba(200, 100, 240, 0.4)',
+"fill-opacity": ["case",
+["boolean", ["feature-state", "hover"], false],
+1,
+0
+]
+}
+});  
+
+map.addLayer({
+'id': 'Precincts',
+'type': 'line',
+'source': 'va-precincts',
+'source-layer': 'vaprecincts-74vmft',
+'paint': {
+'line-color': 'rgba(102, 51, 153, 1)'
+}
+});     
+
+map.addLayer({
+"id": "va-congressional-districts",
+"type": "fill",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.dhsh2ivp'
+},
+"source-layer": "Archive-ctgfl4",
+"paint": {
+    'fill-color': 'rgba(200, 100, 240, 0.4)',
+    'fill-opacity' : 0.3
+}
+});
+
+map.addLayer({
+"id": "Congressional Districts",
+"type": "line",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.dhsh2ivp'
+},
+"source-layer": "Archive-ctgfl4",
+"paint": {
+    'line-color': 'rgba(0, 0, 200, 100)' 
+}
+});
+
+map.addLayer({
+"id": "va-counties",
+"type": "fill",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.dayzxzp6'
+},
+"source-layer": "Archive-1ov68k",
+"paint": {
+    'fill-color': 'rgba(200, 100, 240, 0.4)',
+    
+'fill-opacity' : 0
+}
+});
+
+map.addLayer({
+"id": "Counties",
+"type": "line",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.dayzxzp6'
+},
+"source-layer": "Archive-1ov68k",
+"paint": {
+    'line-color': 'rgba(25, 181, 254, 1)'
+    }
+});
+
+map.addLayer({
+"id": "va-school-districts",
+"type": "fill",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.172pdexj'
+},
+"source-layer": "school_districts-9ub0qu",
+"paint": {
+    'fill-color': 'rgba(200, 100, 240, 0.4)',
+'fill-opacity' : 0
+}
+});
+
+map.addLayer({
+"id": "School Districts",
+"type": "line",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.172pdexj'
+},
+"source-layer": "school_districts-9ub0qu",
+"paint": {
+    'line-color': 'rgba(200, 0, 0, 100)'
+}
+});
+
+map.addLayer({
+"id": "va-house-delegates",
+"type": "fill",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.30d5t9bj'
+},
+"source-layer": "VA_house_of_delegates-4zfhpr",
+"paint": {
+    'fill-color': 'rgba(200, 100, 240, 0.4)',
+'fill-opacity' : 0
+}
+});
+
+map.addLayer({
+"id": "House of Delegates",
+"type": "line",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.30d5t9bj'
+},
+"source-layer": "VA_house_of_delegates-4zfhpr",
+"paint": {
+    'line-color': 'rgba(0, 200, 0, 100)'
+}
+});
+
+map.addLayer({
+"id": "va-state-legislative",
+"type": "fill",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.8xutnj4y'
+},
+"source-layer": "state_legislative_districts-ab455u",
+"paint": {
+    'fill-color': 'rgba(200, 100, 240, 0.4)',
+'fill-opacity' : 0
+}
+});
+
+map.addLayer({
+"id": "State Senate",
+"type": "line",
+"source": {
+    type: 'vector',
+    url: 'mapbox://lelisavo.8xutnj4y'
+},
+"source-layer": "state_legislative_districts-ab455u",
+"paint": {
+    'line-color': 'rgba(211, 84, 0, 1)',
+}
+});
+
+});
+
+
+// working mouseover 
+var popup = new mapboxgl.Popup({
+closeButton: false
+});
+map.on('mousemove', function(e) {
+var features = map.queryRenderedFeatures(e.point, { layers: ['va-precincts-layer','va-congressional-districts','va-counties','va-school-districts','va-house-delegates','va-state-legislative'] });
+// Change the cursor style as a UI indicator.
+map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+if (!features.length) {
+popup.remove();
+return;
+}
+popup.setLngLat(e.lngLat)
+.setHTML("<p><b>" + "Precinct: " + features[5].properties.precinct + " " + features[5].properties.Number + "<br>Congressional District " + features[4].properties.District_1  + "<br>House of Delegates " + features[1].properties.OBJECTID + "<br>" + features[0].properties.NAMELSAD  + "<br>County:</b> " + features[3].properties.NAME + "<br><b>School District:</b> " + features[2].properties.NAME + "</b></p>")
+.addTo(map);
+
+
+ console.log(features)
+
+});
+
+var hoveredStateId =  null;
+
+map.on("mousemove", "va-precincts-layer", function(e) {
+if (e.features.length > 0) {
+if (hoveredStateId) {
+map.setFeatureState({source: 'va-precincts', sourceLayer: 'vaprecincts-74vmft', id: hoveredStateId}, { hover: false});
+}
+hoveredStateId = e.features[0].id;
+map.setFeatureState({source: 'va-precincts', sourceLayer: 'vaprecincts-74vmft', id: hoveredStateId}, { hover: true});
+}
+});
+ 
+// When the mouse leaves the state-fill layer, update the feature state of the
+// previously hovered feature.
+map.on("mouseleave", "va-precincts-layer", function() {
+if (hoveredStateId) {
+map.setFeatureState({source: 'va-precincts', sourceLayer: 'vaprecincts-74vmft', id: hoveredStateId}, { hover: false});
+}
+hoveredStateId =  null;
+});
+
+var toggleableLayerIds = [ 'Precincts', 'Congressional Districts', 'House of Delegates', 'State Senate', 'Counties', 'School Districts',];
+
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+  var id = toggleableLayerIds[i];
+
+  var link = document.createElement('a');
+  link.href = '#';
+  link.className = 'active';
+  link.textContent = id;
+
+  link.onclick = function (e) {
+      var clickedLayer = this.textContent;
+      e.preventDefault();
+      e.stopPropagation();
+
+      var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+      if (visibility === 'visible') {
+          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+          this.className = '';
+      } else {
+          this.className = 'active';
+          map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+      }
+  };
+
+  var layers = document.getElementById('menu');
+  layers.appendChild(link);
+}
+
+
+
+</script>
+ 
+</body>
+</html>
+
+
